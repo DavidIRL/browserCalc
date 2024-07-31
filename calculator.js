@@ -12,8 +12,8 @@ function buttonClick(value) {
     updateScreen();
 }
 
-function isNumber(value); {
-    if (buffer === "0") {
+function isNumber(value) {
+    if (inBuf === "0") {
         inBuf = value;
     } else {
         inBuf += value;
@@ -68,7 +68,7 @@ function isSymbol(value) {
             if (inBuf.length === 1) {
                 inBuf = "0";
             } else {
-                inBuf = inBuf.substring(0, inBuf.length-1);
+                inBuf = inBuf.substr(0, inBuf.length-1);
             }
             break;
         case "+":
@@ -80,13 +80,13 @@ function isSymbol(value) {
     }
 }
 
-function update() {
+function updateScreen() {
     screen.innerText = inBuf;
 }
 
 function init() {
     document
-        .querySelector(".calc-buttons")
+        .querySelector(".buttons")
         .addEventListener("click", function (event) {
             buttonClick(event.target.innerText);
         });
