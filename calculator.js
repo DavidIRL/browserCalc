@@ -1,5 +1,5 @@
 let runningTotal = 0;
-let inputBuffer = "0";
+let inBuf = "0";
 let lastOperator;
 const screen = document.querySelector(".screen");
 
@@ -14,19 +14,19 @@ function buttonClick(value) {
 
 function isNumber(value); {
     if (buffer === "0") {
-        buffer = value;
+        inBuf = value;
     } else {
-        buffer += value;
+        inBuf += value;
     }
 }
 
 function doMath(value) {
-    if (buffer === "0") {
+    if (inBuf === "0") {
         // no math to perform
         return;
     }
 
-    const bufInts = parseInt(buffer);
+    const bufInts = parseInt(inBuf);
     if (runningTotal === 0) {
         runningTotal = bufInts;
     } else {
@@ -34,7 +34,7 @@ function doMath(value) {
     }
     
     lastOperator = value;
-    buffer = "0"
+    inBuf = "0"
 }
 
 function doOperation(bufInts) {
@@ -53,20 +53,43 @@ function isSymbol(value) {
     switch (value) {
         case "C":
             runningTotal = 0;
-            inputBuffer = "0";
+            inBuf = "0";
             break;
         case "=":
             if (lastOperator === null) {
                 return;
             }
-            
+            doOperation(parseInt(inBuf));
+            lastOperator = null;
+            inBuf = +runningTotal;
+            runningTotal = 0;
+            break;
+        case "←":
+            if (inBuf.length === 1) {
+                inBuf = "0";
+            } else {
+                inBuf = inBuf.substring(0, inBuf.length-1);
+            }
+            break;
+        case "+":
+        case "-":
+        case "×":
+        case "÷":
+            doMath(value);
+            break;
     }
 }
 
+function update() {
+    screen.innerText = inBuf;
+}
 
+function init() {
+    document
+        .querySelector(".calc-buttons")
+        .addEventListener("click", function (event) {
+            buttonClick(event.target.innerText);
+        });
+}
 
-
-
-
-
-
+init();
